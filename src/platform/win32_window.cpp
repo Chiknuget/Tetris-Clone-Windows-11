@@ -69,6 +69,7 @@ namespace {
             return 0;
         }
 
+        // Key-up messages may be missed while unfocused, so release held keys.
         case WM_KILLFOCUS:
             if (g_input != nullptr) g_input->release_all();
             return 0;
@@ -131,6 +132,7 @@ namespace platform {
         return g_open;
     }
 
+    // WM_PAINT reuses this canvas; keep it alive until the next present or close_window.
     void present(const Canvas& canvas) {
         g_last_frame = &canvas;
         if (g_dc != nullptr) blit(g_dc, canvas);

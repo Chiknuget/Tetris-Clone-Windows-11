@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-// 7 bag randomizer: every 7 pieces contain each piece exactly once
+// Each shuffled bag contains one of each piece; the preview queue can span bags.
 class Randomizer {
 public:
 	static constexpr int kPreviewCount = 5;

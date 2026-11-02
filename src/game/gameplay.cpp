@@ -95,6 +95,7 @@ bool Gameplay::try_move(int dx, int dy) {
 }
 
 bool Gameplay::try_rotate(int dir) {
+    // Try the SRS offsets in order; the first collision-free position wins.
     const int to = (cur_.rot + (dir > 0 ? 1 : 3)) % 4;
     for (int test = 0; test < pieces::kKickTests; ++test) {
         const Cell k = pieces::kick(cur_.type, cur_.rot, dir, test);
@@ -130,6 +131,7 @@ void Gameplay::handle_horizontal(const Input& in, double dt) {
     int dir = 0;
     if (in.pressed[KeyLeft]) dir = -1;
     else if (in.pressed[KeyRight]) dir = 1;
+    // A new press takes priority; otherwise keep the previous direction when both are held.
     else if (left && right) dir = das_dir_;
     else if (left) dir = -1;
     else if (right) dir = 1;
@@ -148,6 +150,7 @@ void Gameplay::handle_horizontal(const Input& in, double dt) {
         return;
     }
 
+    // After the initial move, wait for DAS before repeating at the ARR interval.
     das_timer_ += dt;
     if (das_timer_ < config_.das) return;
     arr_timer_ += dt;
@@ -174,6 +177,7 @@ void Gameplay::apply_gravity(const Input& in, double dt) {
         fall_timer_ -= interval;
         if (try_move(0, 1)) {
             if (soft) score_ += scoring::kSoftDropPerCell;
+            // Reaching a new lowest row restores the grounded move reset allowance.
             if (cur_.y > lowest_y_) {
                 lowest_y_ = cur_.y;
                 lock_resets_ = 0;
@@ -224,6 +228,7 @@ void Gameplay::lock_piece() {
         return;
     }
 
+    // Score at the current level before applying any level gained by this clear.
     const int count = static_cast<int>(rows.size());
     const long long points = scoring::line_clear_points(count, level_);
     score_ += points;
