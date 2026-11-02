@@ -37,6 +37,7 @@ std::vector<int> Board::full_rows() const {
 }
 
 void Board::remove_rows(const std::vector<int>& rows) {
+    // Compact surviving rows downward, preserving their order, then clear the top.
     int write = kRows - 1;
     for (int read = kRows - 1; read >= 0; --read) {
         if (std::find(rows.begin(), rows.end(), read) != rows.end()) continue;

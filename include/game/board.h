@@ -16,7 +16,7 @@ public:
     bool fits(const Piece& p) const;
     int cell(int col, int row) const { return cells_[row][col]; }  // 0 = empty, else type + 1
 
-    // Writes the piece into the grid. Returns true if it landed entirely in the hidden rows.
+    // The caller must ensure p fits. Returns true if all its cells are in hidden rows.
     bool place(const Piece& p);
 
     std::vector<int> full_rows() const;

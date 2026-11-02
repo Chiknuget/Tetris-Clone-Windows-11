@@ -29,6 +29,7 @@ public:
 
     void start(const GameConfig& config);
     void update(const Input& in, double dt);
+    // Transfers pending events to the caller and empties the event queue.
     std::vector<GameEvent> take_events();
 
     const Board& board() const { return board_; }

@@ -99,6 +99,7 @@ void GameScreen::handle_events() {
             for (const Cell& cell : e.cells) {
                 row_sum += cell.y;
                 if (settings_.particles && cell.y >= Board::kHiddenRows) {
+                    // Cleared rows remain on the board during the animation, preserving colors.
                     const int v = game_.board().cell(cell.x, cell.y);
                     const Color color = v > 0 ? pieces::color(v - 1) : theme::kWhite;
                     effects_.burst(static_cast<float>(cell_x(cell.x) + kCell / 2),
